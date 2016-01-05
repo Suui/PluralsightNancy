@@ -9,7 +9,7 @@ namespace Pluralsight.NancyIntro
 {
 	public class CourseModule : NancyModule {
 
-		public CourseModule() : base("/courses")
+		public CourseModule(Repository repository) : base("/courses")
 		{
 			Before += context =>
 			{
@@ -25,14 +25,14 @@ namespace Pluralsight.NancyIntro
 				context.Response.WithHeader("x-processing-time", processTime.ToString(CultureInfo.CurrentCulture));
 			};
 
-			Get["/"] = _ => new JsonResponse(Repository.Courses, new DefaultJsonSerializer());
+			Get["/"] = _ => new JsonResponse(repository, new DefaultJsonSerializer());
 
-			Get["/{id}"] = parameter => Response.AsJson((Course)Repository.GetCourse(parameter.id));
+			Get["/{id}"] = parameter => Response.AsJson((Course) repository.GetCourse(parameter.id));
 
 			Post["/", context => context.Request.Headers.ContentType != "application/x-www-urlencoded"] = _ =>
 			{
 				var course = this.Bind<Course>();
-				Repository.AddCourse(course);
+				repository.AddCourse(course);
 
 				return CourseResponse(course);
 			};

@@ -1,44 +1,35 @@
-﻿using System.Collections.Generic;
-using log4net;
+﻿using log4net;
 using log4net.Config;
-using Nancy;
 using Nancy.Bootstrapper;
-using Nancy.TinyIoc;
 
 
 namespace Pluralsight.NancyIntro
 {
-	public class DefaultPluralsightBootstrapper : DefaultNancyBootstrapper
+	public class LoggingStartup : IApplicationStartup
 	{
-		protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
+		private readonly ILog _logger;
+
+		public LoggingStartup()
 		{
-			base.ApplicationStartup(container, pipelines);
+			_logger = LogManager.GetLogger(typeof (LoggingStartup));
+		}
+
+		public void Initialize(IPipelines pipelines)
+		{
 			XmlConfigurator.Configure();
-		}
 
-		protected override void RegisterInstances(TinyIoCContainer container, IEnumerable<InstanceRegistration> instanceRegistrations)
-		{
-			base.RegisterInstances(container, instanceRegistrations);
-			container.Register(typeof (ILog), (_container, _overload) => LogManager.GetLogger(typeof (DefaultNancyBootstrapper)));
-		}
-
-		protected override void RequestStartup(TinyIoCContainer container, IPipelines pipelines, NancyContext context)
-		{
-			base.RequestStartup(container, pipelines, context);
-			var logger = container.Resolve<ILog>();
-
-			pipelines.BeforeRequest += _context =>
+			pipelines.BeforeRequest.AddItemToStartOfPipeline(context =>
 			{
-				logger.DebugFormat("Starting request for {0}", _context.Request.Url);
+				_logger.DebugFormat("Starting request for {0}", context.Request.Url);
 				return null;
-			};
+			});
 
-			pipelines.AfterRequest += _context => logger.DebugFormat("Ending request for {0}", _context.Request.Url);
+			pipelines.AfterRequest += context => _logger.DebugFormat("Ending request for {0}", context.Request.Url);
 
-			pipelines.OnError += (_context, _error) =>
+			pipelines.OnError += (context, error) =>
 			{
-				logger.ErrorFormat("Error on request({0}): {1}", _context.Request.Url, _error.Message);
-				return _context.Response;
+				_logger.ErrorFormat("Error on request({0}): {1}", context.Request.Url, error.Message);
+				return context.Response;
 			};
 		}
 	}

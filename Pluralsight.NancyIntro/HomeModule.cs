@@ -10,8 +10,9 @@ namespace Pluralsight.NancyIntro
 		{
 			Func<Request, bool> isNotAnApiClient = request => !request.Headers.UserAgent.ToLower().StartsWith("curl");
 
-			Get["/", context => isNotAnApiClient.Invoke(context.Request)] = _ => View["index"];
-			Get["/"] = _ => "Welcome to the Pluralsight API";
+			Get["/"] = _ => Response.AsRedirect("/api/courses");
+
+			Get["/", context => isNotAnApiClient.Invoke(context.Request)] = _ => Response.AsRedirect("/courses");
 		}
 	}
 }

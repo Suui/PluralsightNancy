@@ -2,7 +2,7 @@
 using System.Linq;
 
 
-namespace Pluralsight.NancyIntro
+namespace Pluralsight.NancyIntro.Course
 {
 	public class Course : IEntity
 	{

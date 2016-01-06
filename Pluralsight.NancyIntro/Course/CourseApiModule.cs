@@ -5,11 +5,11 @@ using Nancy.ModelBinding;
 using Nancy.Responses;
 
 
-namespace Pluralsight.NancyIntro
+namespace Pluralsight.NancyIntro.Course
 {
-	public class CourseModule : NancyModule {
-
-		public CourseModule(Repository repository) : base("/courses")
+	public class CourseApiModule : NancyModule
+	{
+		public CourseApiModule(Repository repository) : base("/api/courses")
 		{
 			Before += context =>
 			{

@@ -27,9 +27,9 @@ namespace Pluralsight.NancyIntro.Course
 
 			Get["/"] = _ => new JsonResponse(repository, new DefaultJsonSerializer());
 
-			Get["/{id}"] = parameter => Response.AsJson((Course) repository.GetCourse(parameter.id));
+			Get["/{id}"] = course => Response.AsJson((Course) repository.GetCourse(course.id));
 
-			Post["/", context => context.Request.Headers.ContentType != "application/x-www-urlencoded"] = _ =>
+			Post["/"] = _ =>
 			{
 				var course = this.Bind<Course>();
 				repository.AddCourse(course);

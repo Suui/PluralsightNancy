@@ -88,7 +88,9 @@
     <Content Include="Content\Scripts\jquery-1.9.0.min.js" />
     <Content Include="Course\Views\courses.html" />
     <Content Include="Views\index.html" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Course\Course.cs" />
@@ -106,9 +108,11 @@
     <Content Include="Course\Views\Course.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup />

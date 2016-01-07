@@ -1,4 +1,4 @@
-﻿@inherits NancyRazorViewBase<Pluralsight.NancyIntro.Course.Course>
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Pluralsight.NancyIntro.Course.Course>
 
 <!DOCTYPE html>
 <html>
@@ -12,7 +12,7 @@
         <ul>
             @foreach (var module in Model.Modules)
             {
-                <li>module.Topic</li>
+                <li>@module.Topic</li>
             }
         </ul>
         
